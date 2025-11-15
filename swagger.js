@@ -6,7 +6,7 @@ const doc = {
     title: 'API da Biblioteca',
     description: 'API para gerenciar livros e membros (patrons).'
   },
-  host: 'https://biblioteca-api-jdiz.onrender.com', // Mude para seu host do Render depois
+  host: 'biblioteca-api-jdiz.onrender.com', // Mude para seu host do Render depois
   schemes: ['https'],      // Mude para ['https'] no Render
 };
 
