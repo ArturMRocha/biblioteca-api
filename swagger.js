@@ -6,8 +6,8 @@ const doc = {
     title: 'API da Biblioteca',
     description: 'API para gerenciar livros e membros (patrons).'
   },
-  host: 'localhost:3000', // Mude para seu host do Render depois
-  schemes: ['http'],      // Mude para ['https'] no Render
+  host: 'https://biblioteca-api-jdiz.onrender.com', // Mude para seu host do Render depois
+  schemes: ['https'],      // Mude para ['https'] no Render
 };
 
 const outputFile = './swagger-output.json';
