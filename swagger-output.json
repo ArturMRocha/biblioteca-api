@@ -5,7 +5,7 @@
     "description": "API para gerenciar livros e membros (patrons).",
     "version": "1.0.0"
   },
-  "host": "https://biblioteca-api-jdiz.onrender.com",
+  "host": "biblioteca-api-jdiz.onrender.com",
   "basePath": "/",
   "schemes": [
     "https"
