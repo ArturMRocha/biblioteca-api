@@ -1,4 +1,4 @@
-// server.js (Versão Corrigida e Completa)
+// server.js (Versão Corrigida SEM connect-mongo)
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongodb = require('./data/database');
@@ -6,13 +6,13 @@ const cors = require('cors');
 const session = require('express-session');
 const passport = require('passport');
 const GitHubStrategy = require('passport-github2').Strategy;
-const MongoStore = require('connect-mongo'); // <-- IMPORTAR MONGOSTORE
+// NENHUMA menção a connect-mongo
 
 // --- LÓGICA DO PASSPORT (no topo) ---
 passport.use(new GitHubStrategy({
     clientID: process.env.GITHUB_CLIENT_ID,
     clientSecret: process.env.GITHUB_CLIENT_SECRET,
-    callbackURL: "/auth/github/callback" // ✅ AQUI ESTÁ A CORREÇÃO 1
+    callbackURL: "/auth/github/callback" // ✅ Correção 1: Caminho Relativo
   },
   (accessToken, refreshToken, profile, done) => {
     return done(null, profile);
@@ -39,12 +39,12 @@ app.use(session({
   resave: false,
   saveUninitialized: true,
   cookie: { 
-    secure: true // ✅ AQUI ESTÁ A CORREÇÃO 2 (para https)
-  },
+    secure: true // ✅ Correção 2: Seguro para https
+  }
+  // Sem o 'store: MongoStore'
 }));
 
 // --- INICIALIZE O PASSPORT ---
-// (Deve vir DEPOIS da sessão)
 app.use(passport.initialize());
 app.use(passport.session());
 
