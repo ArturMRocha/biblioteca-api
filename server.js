@@ -1,53 +1,62 @@
+// server.js (Versão Corrigida e Completa)
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongodb = require('./data/database');
 const cors = require('cors');
 const session = require('express-session');
 const passport = require('passport');
-const GitHubStrategy = require('passport-github2').Strategy; // <-- IMPORTAR ESTRATÉGIA
+const GitHubStrategy = require('passport-github2').Strategy;
+const MongoStore = require('connect-mongo'); // <-- IMPORTAR MONGOSTORE
 
-// --- LÓGICA DO PASSPORT ---
+// --- LÓGICA DO PASSPORT (no topo) ---
 passport.use(new GitHubStrategy({
     clientID: process.env.GITHUB_CLIENT_ID,
     clientSecret: process.env.GITHUB_CLIENT_SECRET,
-    callbackURL: "/auth/github/callback"
+    callbackURL: "/auth/github/callback" // ✅ AQUI ESTÁ A CORREÇÃO 1
   },
   (accessToken, refreshToken, profile, done) => {
-    // Aqui você poderia salvar/procurar o usuário no seu DB
-    // Por enquanto, vamos apenas confiar no perfil do GitHub
     return done(null, profile);
   }
 ));
 
-// Salva o usuário na sessão
 passport.serializeUser((user, done) => {
   done(null, user);
 });
 
-// Remove o usuário da sessão
 passport.deserializeUser((user, done) => {
   done(null, user);
 });
+// -------------------------
 
 const app = express();
-
 const port = process.env.PORT || 3000;
 
 app.use(bodyParser.json());
-app.use(cors());
+
+// --- CONFIGURAÇÃO DE SESSÃO (Corrigida) ---
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: true,
-  cookie: { secure: true } 
+  cookie: { 
+    secure: true // ✅ AQUI ESTÁ A CORREÇÃO 2 (para https)
+  },
+  // Armazena a sessão no MongoDB
+  store: MongoStore.create({ // ✅ AQUI ESTÁ A CORREÇÃO 3 (MemoryStore)
+    mongoUrl: process.env.MONGODB_URI
+  })
 }));
+
+// --- INICIALIZE O PASSPORT ---
+// (Deve vir DEPOIS da sessão)
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Rota principal
+// --- CORS E ROTAS ---
+app.use(cors());
 app.use('/', require('./routes'));
 
-// Inicia o banco e o servidor
+// --- INICIA O SERVIDOR ---
 mongodb.initDb((err) => {
   if (err) {
     console.log(err);
