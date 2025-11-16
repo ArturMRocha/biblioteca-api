@@ -41,10 +41,6 @@ app.use(session({
   cookie: { 
     secure: true // ✅ AQUI ESTÁ A CORREÇÃO 2 (para https)
   },
-  // Armazena a sessão no MongoDB
-  store: MongoStore.create({ // ✅ AQUI ESTÁ A CORREÇÃO 3 (MemoryStore)
-    mongoUrl: process.env.MONGODB_URI
-  })
 }));
 
 // --- INICIALIZE O PASSPORT ---
