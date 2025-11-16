@@ -39,7 +39,7 @@ app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: true,
-  cookie: { secure: true } // Mude para 'true' em produção (https://)
+  cookie: { secure: true } 
 }));
 app.use(passport.initialize());
 app.use(passport.session());
